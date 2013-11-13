@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+  </head>
+  <body>
+    <div ng-app>
+  <div>
+    <label>Name:</label>
+    <input type="text" ng-model="yourName" placeholder="Enter a name here">
+    <hr>
+    <h1>{% raw %} Hello {{yourName}}! {% endraw %}</h1>
+  </div>
+</div>
+  </body>
+</html>
