@@ -1,17 +1,65 @@
 <!doctype html>
 <html>
   <head>
+    <script src="http://codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
+
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+    
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+
+    <link href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css" rel="stylesheet">
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.js"></script>
+    <script src="http://jquery-datatables-row-grouping.googlecode.com/svn/trunk/media/js/jquery.dataTables.rowGrouping.js"></script>
   </head>
   <body>
     <div ng-app>
-  <div>
+  <!--<div>
     <label>Name:</label>
     <input type="text" ng-model="yourName" placeholder="Enter a name here">
     <hr>
     <h1>{% raw %} Hello {{yourName}}! {% endraw %}</h1>
   </div>
-</div>
+    <hr />-->
+    
+    <table id="capabilitytable">
+    <thead>
+        <td></td>
+        <td></td>
+        <td>Level 0</td>
+        <td>Level 1</td>
+        <td>Level 2</td>
+        <td>Level 3</td>
+    </thead>
+    <tbody>
+
+    {% for group in items | groupby('category') %}
+        {% for group2 in group.list | groupby('subcategory')%}
+            <tr>
+                <td>{{ group.grouper }}</td>
+                <td>{{ group2.grouper }}</td>
+            
+                {% for x in group2.list | sort(attribute='level') %}
+                    <td>{{ x.description }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    {% endfor %}
+
+    </tbody>
+    </table>
+
+    <script>
+        $(document).ready(function(){
+            $('#capabilitytable')
+                .dataTable({
+                        bSort:false,
+                        bPaginate:false
+                    })
+                .rowGrouping({	iGroupingColumnIndex1: 1});
+        });
+    </script>
+
   </body>
 </html>
