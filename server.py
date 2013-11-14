@@ -9,6 +9,7 @@ from flask import Flask, render_template
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
 
 import os
@@ -21,12 +22,12 @@ def initDB():
                 (2, "Computer Science", "Data structures", 1, "Able to explain and use Arrays, LinkedLists, Dictionaries etc in practical programming tasks"),
                 (3, "Computer Science", "Data structures", 2, "Knows space and time tradeoffs of the basic data structures, Arrays vs LinkedLists, Able to explain how hashtables can be implemented and can handle collisions, Priority queues and ways to implement them etc."),
                 (4, "Computer Science", "Data structures", 3, "Knowledge of advanced data structures like B-trees, binomial and fibonacci heaps, AVL/Red Black trees, Splay Trees, Skip Lists, tries etc."),
-                
+
                 (5, "Computer Science", "Algorithms", 0, "Unable to find the average of numbers in an array (It’s hard to believe but I’ve interviewed such candidates)"),
                 (6, "Computer Science", "Algorithms", 1, "Basic sorting, searching and data structure traversal and retrieval algorithms"),
                 (7, "Computer Science", "Algorithms", 2, "Tree, Graph, simple greedy and divide and conquer algorithms, is able to understand the relevance of the levels of this matrix."),
                 (8, "Computer Science", "Algorithms", 3, "Able to recognize and code dynamic programming solutions, good knowledge of graph algorithms, good knowledge of numerical computation algorithms, able to identify NP problems etc."),
-                
+
                 (9, "Computer Science", "systems programming", 0, "Doesn't know what a compiler, linker or interpreter is"),
                 (10, "Computer Science", "systems programming", 1, "Basic understanding of compilers, linker and interpreters. Understands what assembly code is and how things work at the hardware level. Some knowledge of virtual memory and paging."),
                 (11, "Computer Science", "systems programming", 2, "Understands kernel mode vs. user mode, multi-threading, synchronization primitives and how they’re implemented, able to read assembly code. Understands how networks work, understanding of network protocols and socket level programming."),
@@ -46,7 +47,7 @@ def initDB():
                 (22, "Software Engineering", "automated testing", 1, "Has written automated unit tests and comes up with good unit test cases for the code that is being written"),
                 (23, "Software Engineering", "automated testing", 2, "Has written code in TDD manner"),
                 (24, "Software Engineering", "automated testing", 3, "Understands and is able to setup automated functional, load/performance and UI tests	"),]
-    
+
     session = Session()
     for d in initdata:
         id, category, subcategory, level, desc = d
@@ -54,18 +55,23 @@ def initDB():
         res = session.query(Capability).filter(Capability.id==id).count()
         if res == 0:
             session.add(capability)
-        
-    
+
+
     session.commit()
-    
+
 def createDBSession():
-    DATABASE_ENVVAR = "HEROKU_POSTGRESQL_RED_URL"    
-    
+    DATABASE_ENVVAR = "HEROKU_POSTGRESQL_RED_URL"
+
     if DATABASE_ENVVAR in os.environ:
         urlparse.uses_netloc.append("postgres")
-        url = urlparse.urlparse(os.environ[DATABASE_ENVVAR])   
-        print url
-        engine = create_engine(url)
+        url = urlparse.urlparse(os.environ[DATABASE_ENVVAR])
+
+        engine = create_engine(URL(drivername="postgresql",
+                                   username=url.username,
+                                   password=url.password,
+                                   host=url.hostname,
+                                   port=url.port,
+                                   database=url.path[1:]))
     else:
         engine = create_engine('postgresql://postgres:pass123@localhost:5432/ProgCapMat',
                            echo=True)
@@ -73,7 +79,7 @@ def createDBSession():
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     return Session
-    
+
 def connectDB():
     return Session()
 
@@ -105,29 +111,29 @@ initDB()
 @app.route("/")
 def index():
     session = Session()
-    
+
     allcap = session.query(Capability)
     categories = session.query(Capability.category).distinct()
-    
-    
-    processed = list()  
+
+
+    processed = list()
     for cat in categories:
         subcats = session.query(Capability.subcategory).distinct()
         print cat
         print [x for x in subcats]
-        
+
         for sub in subcats:
             items = session.query(Capability.level, Capability.description).filter(Capability.category == cat, Capability.subcategory == sub)
             print [x for x in items]
             processed.append((cat, sub, items))
-        
-        
-     
-    
-    
+
+
+
+
+
     return render_template('index.html', categories = categories, items = allcap)
 
-if __name__ == "__main__":   
-    
+if __name__ == "__main__":
+
     app.debug = True
     app.run()
