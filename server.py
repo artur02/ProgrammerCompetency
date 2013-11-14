@@ -10,7 +10,10 @@ from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import itertools
+
+import os
+import psycopg2
+import urlparse
 
 Base = declarative_base()
 
@@ -56,7 +59,12 @@ def index():
     return render_template('index.html', categories = categories, items = allcap)
 
 if __name__ == "__main__":
-    engine = create_engine('postgresql://postgres:pass123@localhost:5432/ProgCapMat',
+    if "DATABASE_URL" in os.environ:
+        urlparse.uses_netloc.append("postgres")
+        url = urlparse.urlparse(os.environ["DATABASE_URL"])    
+        engine = create_engine(url)
+    else:
+        engine = create_engine('postgresql://postgres:pass123@localhost:5432/ProgCapMat',
                            echo=True)
     print engine
     Base.metadata.create_all(engine)
