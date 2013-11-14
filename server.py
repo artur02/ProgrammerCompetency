@@ -63,7 +63,8 @@ def createDBSession():
     
     if DATABASE_ENVVAR in os.environ:
         urlparse.uses_netloc.append("postgres")
-        url = urlparse.urlparse(os.environ[DATABASE_ENVVAR])    
+        url = urlparse.urlparse(os.environ[DATABASE_ENVVAR])   
+        print url
         engine = create_engine(url)
     else:
         engine = create_engine('postgresql://postgres:pass123@localhost:5432/ProgCapMat',
