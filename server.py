@@ -15,61 +15,8 @@ import os
 import psycopg2
 import urlparse
 
-Base = declarative_base()
 
-
-class Capability(Base):
-    __tablename__ = 'capabilities'
-
-    id = Column(Integer, primary_key=True)
-    category = Column(String)
-    subcategory = Column(String)
-    level = Column(Integer)
-    description = Column(String)
-
-    def __repr__(self):
-        return "<Capability(id={id}, category={category}, subcategory={subcat}, level={level}, desc={desc})>".format(id=self.id, category=self.category, subcat=self.subcategory, level=self.level, desc=self.description.encode('utf8')).decode("utf-8")
-
-app = Flask(__name__)
-
-
-@app.route("/")
-def index():
-    session = Session()
-    
-    allcap = session.query(Capability)
-    categories = session.query(Capability.category).distinct()
-    
-    
-    processed = list()  
-    for cat in categories:
-        subcats = session.query(Capability.subcategory).distinct()
-        print cat
-        print [x for x in subcats]
-        
-        for sub in subcats:
-            items = session.query(Capability.level, Capability.description).filter(Capability.category == cat, Capability.subcategory == sub)
-            print [x for x in items]
-            processed.append((cat, sub, items))
-        
-        
-     
-    
-    
-    return render_template('index.html', categories = categories, items = allcap)
-
-if __name__ == "__main__":
-    if "DATABASE_URL" in os.environ:
-        urlparse.uses_netloc.append("postgres")
-        url = urlparse.urlparse(os.environ["DATABASE_URL"])    
-        engine = create_engine(url)
-    else:
-        engine = create_engine('postgresql://postgres:pass123@localhost:5432/ProgCapMat',
-                           echo=True)
-    print engine
-    Base.metadata.create_all(engine)
-    Session = sessionmaker(bind=engine)
-    
+def initDB():
     initdata = [(1, "Computer Science", "Data structures", 0, "Doesn’t know the difference between Array and LinkedList"),
                 (2, "Computer Science", "Data structures", 1, "Able to explain and use Arrays, LinkedLists, Dictionaries etc in practical programming tasks"),
                 (3, "Computer Science", "Data structures", 2, "Knows space and time tradeoffs of the basic data structures, Arrays vs LinkedLists, Able to explain how hashtables can be implemented and can handle collisions, Priority queues and ways to implement them etc."),
@@ -110,6 +57,74 @@ if __name__ == "__main__":
         
     
     session.commit()
+    
+def createDBSession():
+    if "DATABASE_URL" in os.environ:
+        urlparse.uses_netloc.append("postgres")
+        url = urlparse.urlparse(os.environ["DATABASE_URL"])    
+        engine = create_engine(url)
+    else:
+        engine = create_engine('postgresql://postgres:pass123@localhost:5432/ProgCapMat',
+                           echo=True)
+    print engine
+    Base.metadata.create_all(engine)
+    Session = sessionmaker(bind=engine)
+    return Session
+    
+def connectDB():
+    return Session()
 
+
+Base = declarative_base()
+
+class Capability(Base):
+    __tablename__ = 'capabilities'
+
+    id = Column(Integer, primary_key=True)
+    category = Column(String)
+    subcategory = Column(String)
+    level = Column(Integer)
+    description = Column(String)
+
+    def __repr__(self):
+        return "<Capability(id={id}, category={category}, subcategory={subcat}, level={level}, desc={desc})>".format(id=self.id, category=self.category, subcat=self.subcategory, level=self.level, desc=self.description.encode('utf8')).decode("utf-8")
+
+
+
+
+app = Flask(__name__)
+
+Session = createDBSession()
+initDB()
+
+
+
+@app.route("/")
+def index():
+    session = Session()
+    
+    allcap = session.query(Capability)
+    categories = session.query(Capability.category).distinct()
+    
+    
+    processed = list()  
+    for cat in categories:
+        subcats = session.query(Capability.subcategory).distinct()
+        print cat
+        print [x for x in subcats]
+        
+        for sub in subcats:
+            items = session.query(Capability.level, Capability.description).filter(Capability.category == cat, Capability.subcategory == sub)
+            print [x for x in items]
+            processed.append((cat, sub, items))
+        
+        
+     
+    
+    
+    return render_template('index.html', categories = categories, items = allcap)
+
+if __name__ == "__main__":   
+    
     app.debug = True
     app.run()
