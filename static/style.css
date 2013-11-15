@@ -18,3 +18,7 @@ table.dataTable thead {
     color: white;
     font-style: normal;
 }
+
+table.dataTable tr.group-item:hover {
+        background-color:PapayaWhip;
+}

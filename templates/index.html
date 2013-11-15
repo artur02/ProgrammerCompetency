@@ -2,6 +2,7 @@
 <html>
   <head>
     <script src="http://codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="http://underscorejs.org/underscore-min.js"></script>
 
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
@@ -12,6 +13,7 @@
     <link href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css" rel="stylesheet">
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.js"></script>
     <script src="http://jquery-datatables-row-grouping.googlecode.com/svn/trunk/media/js/jquery.dataTables.rowGrouping.js"></script>
+    <script src="static/jquery.floatThead.min.js"></script>
 
     <link href="static/style.css" rel="stylesheet">
 
@@ -50,12 +52,18 @@
 
     <script>
         $(document).ready(function(){
-            $('#capabilitytable')
-                .dataTable({
+            var $table = $('#capabilitytable')
+            $table.dataTable({
                         bSort:false,
-                        bPaginate:false
+                        bPaginate:false,
+                        bInfo:false
                     })
                 .rowGrouping({	iGroupingColumnIndex1: 1});
+
+            $table.floatThead({
+                 scrollingTop: 0,
+                 useAbsolutePositioning:false
+            });
         });
     </script>
 
