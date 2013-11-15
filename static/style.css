@@ -1,0 +1,20 @@
+.group {
+    font-weight: bold;
+    background-color: lightgray;
+    color: black;
+}
+
+
+
+table.dataTable tr.odd { background-color: whitesmoke; }
+
+table.dataTable tr>td:first-of-type:not(.group) {
+    font-style:italic;
+}
+
+table.dataTable thead {
+    font-weight: bold;
+    background-color: darkgray;
+    color: white;
+    font-style: normal;
+}

@@ -5,7 +5,7 @@ Created on Tue Nov 12 14:43:36 2013
 @author: Artur_Herczeg
 """
 
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 
 import database as db
 from domain import Capability
@@ -39,6 +39,8 @@ def index():
         categories=categories, items=allcap)
 
 if __name__ == "__main__":
+    with app.test_request_context():
+        url_for('static', filename='style.css')
 
     app.debug = True
     app.run()
