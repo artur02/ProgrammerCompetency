@@ -33,8 +33,12 @@ var processor = (function () {
     };
 
     var imp = function(ids) {
+        $("tr.group-item > td").removeClass("selected selectedPrev mover mprev");
+
         $(ids).each(function(){
-            $("tr.group-item > td[data-id=" + this +"]").click()
+
+
+            $("tr.group-item > td[data-id=" + this +"]").click();
         });
     };
 

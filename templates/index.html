@@ -23,8 +23,8 @@
 
     <h1>Programmer Competency Matrix</h1>
 
-    <button id="btnExport" type="button" class="btn btn-default"  data-toggle="modal" data-target="#exportmodal">Export</button>
-    <button id="btnImport" type="button" class="btn btn-default">Import</button>
+    <button id="btnExport" type="button" class="btn btn-default" data-toggle="modal" data-target="#exportmodal">Export</button>
+    <button id="btnImport" type="button" class="btn btn-default" data-toggle="modal" data-target="#importmodal">Import</button>
 
     <table id="capabilitytable">
     <thead>
@@ -59,7 +59,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">Export</h4>
+            <h4 class="modal-title" id="ExportModalLabel">Export</h4>
             <p>Save the following JSON to restore your selections later</p>
           </div>
           <div class="modal-body">
@@ -67,6 +67,26 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- Import Modal -->
+    <div class="modal fade" id="importmodal" tabindex="-1" role="dialog" aria-labelledby="export" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="ImportModalLabel">Import</h4>
+            <p>Paste your JSON below</p>
+          </div>
+          <div class="modal-body">
+            <textarea  id="idinput" autofocus required placeholder="Paste your JSON here"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button id="btnModalImport" type="button" class="btn btn-default" data-dismiss="modal">Import</button>
+            <button type="button" class="btn" data-dismiss="modal">Cancel</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -95,7 +115,14 @@
         $(function(){
             $('#exportmodal').on('shown.bs.modal', function () {
                 $(this).find(".modal-body").text(JSON.stringify(processor.exp()));
-            })
+            });
+
+            $('#btnModalImport').click(function () {
+                result = JSON.parse($("#idinput").val());
+                if(Array.isArray(result)){
+                    processor.imp(result);
+                }
+            });
         });
     </script>
 

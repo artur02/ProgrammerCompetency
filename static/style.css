@@ -41,3 +41,8 @@ table.dataTable tr.group-item:hover {
 .mprev {
     background-color:lightgreen;
 }
+
+#idinput {
+    min-width: 100%;
+    min-height: 100px;
+}
