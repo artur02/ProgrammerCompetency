@@ -42,6 +42,7 @@ if __name__ == "__main__":
     with app.test_request_context():
         url_for('static', filename='style.css')
         url_for('static', filename='jquery.floatThead.min.js')
+        url_for('static', filename='processor.js')
 
     app.debug = True
     app.run()

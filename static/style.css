@@ -20,5 +20,24 @@ table.dataTable thead {
 }
 
 table.dataTable tr.group-item:hover {
-        background-color:PapayaWhip;
+    background-color:PapayaWhip;
+}
+
+.selectedPrev {
+    background-color:lightgreen;
+}
+
+.selected {
+    background-color:darkgreen;
+    color:white;
+    font-weight: bold;
+}
+
+.mover {
+    background-color:darkgreen;
+    color:white;
+}
+
+.mprev {
+    background-color:lightgreen;
 }
