@@ -1,0 +1,13 @@
+[global]
+ApplicationName=ProgrammerCompetency
+AwsCredentialFile=C:\Users\Artur_Herczeg1@epam.com\.elasticbeanstalk\aws_credential_file
+DevToolsEndpoint=git.elasticbeanstalk.eu-west-1.amazonaws.com
+EnvironmentName=ProgrammerCompetency-en
+EnvironmentType=SingleInstance
+InstanceProfileName=aws-elasticbeanstalk-ec2-role
+OptionSettingFile=D:\Source\ProgrammerCompetency\.elasticbeanstalk\optionsettings.ProgrammerCompetency-en
+RdsEnabled=No
+Region=eu-west-1
+ServiceEndpoint=https://elasticbeanstalk.eu-west-1.amazonaws.com
+SolutionStack=64bit Amazon Linux 2013.09 running Python 2.7
+
