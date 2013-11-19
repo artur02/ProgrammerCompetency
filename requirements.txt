@@ -1,7 +1,10 @@
+tornado>=2.0.0 
+httplib2>=0.8 
+psycopg2>=2.4.6 
+
 Flask==0.10.1
 Jinja2==2.7.1
 MarkupSafe==0.18
 SQLAlchemy==0.8.3
 Werkzeug==0.9.4
 itsdangerous==0.23
-
