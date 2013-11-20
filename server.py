@@ -12,6 +12,7 @@ from domain import Capability
 
 
 app = Flask(__name__)
+application = app
 
 Session = db.createSessionClass()
 db.initDB(Session)
