@@ -1,0 +1,12 @@
+application: hale-keel-404
+version: 1-test
+runtime: python27
+handlers:
+-   url: /static
+    static_dir: /static
+-   url: /.*
+    script: server.py
+api_version: 1
+threadsafe: false
+env_variables:
+    HEROKU_POSTGRESQL_RED_URL: postgres://mgmjostlpgjgmp:0Ku2g-BEanV8E6YSyCtX73Kmu1@ec2-54-204-37-113.compute-1.amazonaws.com:5432/d4cs67v1tal6q9

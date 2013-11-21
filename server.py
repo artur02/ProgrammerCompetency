@@ -4,6 +4,15 @@ Created on Tue Nov 12 14:43:36 2013
 
 @author: Artur_Herczeg
 """
+import os
+import sys
+
+
+def fix_path():
+    # credit:  Nick Johnson of Google
+    sys.path.append(os.path.join(os.path.dirname(__file__), 'lib'))
+
+fix_path()
 
 from flask import Flask, render_template, url_for
 
